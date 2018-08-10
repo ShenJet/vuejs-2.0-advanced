@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>组件名</h3>
+        <h4>1.W3C 规范下自定义组件名应该是 a-b 的形式，小写字母+连字符</h4>
+        <h4>2.定义时，组件名如果是是a-b，则在html中也只能用a-b</h4>
+        <h4>3.定义时，组件名如果是是AbcXyz的驼峰命名法，则在html中可以用用abc-xyz，也可以用AbcXyz</h4>
+        <h4 style="color: red">4.注意，尽管如此，直接在 DOM (即非字符串的模板) 中使用时只有 kebab-case 是有效的</h4>
+        <a-b></a-b>
+        <!-- <OneName></OneName> -->
+        <One-Name></one-name>
+            <hr>
+        <h3>全局注册</h4>
+        <h4>1.我们只使用过 Vue.component() 进行全局注册，这样的组件在所有地方都可以使用，是全局性的。
+            并且，三个组件在各自内部也都可以互相使用。
+        </h4>
+        <hr>
+        <h3>局部注册</h3>
+        <h4>即 不使用Vue.component()全局注册，而是在vue实例中添加component属性：</h4>
+        <comp-a>111</comp-a>
+        
+
+    </div>
+    <comp-a>111</comp-a>
+
+</body>
+<script src="vue.js"></script>
+<script>
+    Vue.component("a-b",{
+        template:`<li>li1</li>`
+    })
+    Vue.component("OneName",{
+        template:`<li>li2</li>`
+    })
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            
+        },
+        // 局部组件定义
+        components:{
+            'comp-a':{props:[] ,template:`<li>comp-a组件</li>`}
+        },
+        methods: {
+
+        }
+    })
+</script>
+
+</html>
