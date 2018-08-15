@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>inline-template 使得组件中的内容作为其模板 ，而不是向插槽分发的内容。</h3>
+        <a-b :msg1="msg" inline-template>
+            <div>{{msg1}}</div>
+        </a-b>
+        <h4>*优先选择 template 选项或 .vue 文件里的一个 <template> 元素来定义模板。</h4> 
+            
+
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:{
+            msg1:null
+        },
+        template:`<div>
+                    123
+                </div>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            msg:"hello"
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

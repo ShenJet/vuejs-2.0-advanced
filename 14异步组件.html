@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div id="a">
+        <h3>异步组件
+        </h3>
+        <async-example></async-example>
+
+        <async-webpack-example1></async-webpack-example1>
+
+        <async-webpack-example2></async-webpack-example2>
+    </div>
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    // 异步组件要表达的意思是：我们以往通过Vue.component('comp-name',{config})
+    // 定义的全局组件，其实 都 不 是 异步组件；
+    // 在某些时候，比如大型应用中，我们可能需要将应用分割成小一些的代码块，
+    // 并且只在需要的时候才从服务器加载一个模块。
+    // 因此vue允许使用Vue.component('comp-name',（resolve,reject)=>{
+    // 一些异步操作（比如ajax），之后拿到结果，触发resolve({
+    // template:`<div class="tab">  
+    //     </div>`
+    // })
+    // 将某组件选项返回出来
+    // 这种就叫做异步组件
+    // }
+    // 可能写法：
+    Vue.component('async-example', function (resolve, reject) {
+        setTimeout(function () {
+            // 向 `resolve` 回调传递组件定义
+            resolve({
+            template: '<div>I am async!</div>'
+            })
+        }, 1000)
+    })
+    // 配合webpack：
+    Vue.component('async-webpack-example1', function (resolve) {
+        // 这个特殊的 `require` 语法将会告诉 webpack
+        // 自动将你的构建代码切割成多个包，这些包
+        // 会通过 Ajax 请求加载
+        // require(['./my-async-component'], resolve)
+    })
+    // 也可以在工厂函数中返回一个 Promise
+    Vue.component('async-webpack-example2',
+        // 这个 `import` 函数会返回一个 `Promise` 对象。
+        () => import('./my-async-component')
+    )
+
+    Vue.component('tab1',{
+        props:{
+            WhichSecond:String,
+            SecondBtns:Array,
+            SecondPages:Array
+        },
+        data:function(){
+            return {current:this.WhichSecond}
+        },
+        template:`<div class="tab">
+                    <div class='left'> 
+                        <div v-for='(x,i) in SecondBtns' @click="current=SecondPages[i]"><button>{{x}}</button></div> 
+                    </div> 
+                    <component :is='current'></component>  
+                </div>`
+    })
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            which:"tab1",
+            WhichSecond:"tab11",
+            SecondBtns:['二级按钮1','二级按钮2','二级按钮3'],
+            SecondPages:['tab11','tab12','tab13']
+        },
+        // 使用局部注册的时候，你也可以直接提供一个返回 Promise 的函数
+        components: {
+            'my-component': () => import('./my-async-component')
+        },
+        methods: {
+            
+        }
+    })
+
+    // 处理加载状态
+    const AsyncComponent = () => ({
+        // 需要加载的组件 (应该是一个 `Promise` 对象)
+        component: import('./MyComponent.vue'),
+        // 异步组件加载时使用的组件
+        loading: LoadingComponent,
+        // 加载失败时使用的组件
+        error: ErrorComponent,
+        // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+        delay: 200,
+        // 如果提供了超时时间且组件加载也超时了，
+        // 则使用加载失败时使用的组件。默认值是：`Infinity`
+        timeout: 3000
+    })
+
+    
+</script>
+
+</html>

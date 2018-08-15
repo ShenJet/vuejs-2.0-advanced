@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h4>之前篇目中讲到过组建的props不仅可以是字符串数组，
+            也可以是对象，指定传入数据的数据类型，
+            这种方式相当于提供了一种数据格式校验功能，
+            这种校验功能可以写得更彻底：
+        </h4>
+        <ol>
+            <li>String</li>
+            <li>Number</li>
+            <li>Boolean</li>
+            <li>Array</li>
+            <li>Object</li>
+            <li>Date</li>
+            <li>Function</li>
+            <li>Symbol</li>
+        </ol>
+
+        <!-- 以下这段不在课堂讲 -->
+        <!-- type 还可以是一个自定义的构造函数，
+        并且通过 instanceof 来进行检查确认。 -->
+
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:{
+            //null可以匹配任意类型
+            name:String,//检查是否为String
+            age:[Number, String],
+            sex:String,
+            phoneNumber:{
+                type:Number,
+                required:true
+            },
+            // 给某数据设置个默认值
+            city:{
+                type:String,
+                default:"苏州"
+            },
+            // 带有默认值的对象：
+            job:{
+                type:Object,
+                // 对象或数组一定会从一个工厂函数返回默认值
+                default:function() {
+                    return {
+                        name:"前端开发",
+                        money:10000
+                    }
+                }
+            },
+            // 自定义一个验证函数：
+            mail:{
+                validator:function(v){
+                    // 下方例子的意思是v必须是数组值中的其一
+                    return ['success', 'warning', 'danger'].indexOf(value) !== -1
+                }
+            }
+            // prop 验证失败的时候，(开发环境构建版本的) Vue 将会产生一个控制台的警告。
+        },
+        template:`<div>
+                    
+                </div>`
+    })
+    // <!-- 以下这段不在课堂讲 -->
+    //     <!-- type 还可以是一个自定义的构造函数，
+    //     并且通过 instanceof 来进行检查确认。
+    //     例如，给定下列现成的构造函数： -->
+    // 有如下构造函数：
+    function Person (firstName, lastName) {
+        this.firstName = firstName
+        this.lastName = lastName
+    }
+    Vue.component("x-y",{
+        props:{
+            author:Person
+            // 这样可以检查author的值是否是通过Person创建。
+        }
+    })
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

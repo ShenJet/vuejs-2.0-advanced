@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>1.一个非 prop 特性是指传向一个组件，
+            但是该组件并没有相应 prop 定义的特性。
+            简单说就是，传了，但没在组件中定义。
+        </h3>
+
+        <h3>2.替换 / 合并 已有特性</h3>
+        <h4>这个在之前就已经接触过，比如class和style属性</h4>
+        <h4>静态的属性值会和VUE动态设置的合并，而不是覆盖。</h4>
+        <h4>但是，input的type属性是会覆盖的。（因为这个属性只能是一种！）</h4>
+        <input :type="type">
+
+        <h3>3.禁用特性继承</h3>
+        <h4>如果不希望组件的根元素继承特性，可使用inheritAttrs：false</h4>
+        <a-c :a="attr1" :b='attr2' :c='attr3'></a-c>
+        <h4>最终结果是：</h4>
+        <!-- <div a="1" b="2" c="3"><h3>123</h3></div> -->
+        <h4>如果添加了inheritAttrs：false，则是：</h4>
+        <!-- <div><h3>123</h3></div> -->
+
+        <h4>但是如果仍想使用实例的这些属性值怎么办：</h4>
+        <h3>配合实例的 $attrs 属性使用</h3>
+        <a-d :a="attr1" :b="attr2" :c="attr3" name="shen" age="18"></a-d>
+        <!-- 可以发现添加了$attrs 属性的元素上也有了name和age-->
+
+        
+
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:[''],
+        template:`<div>
+                    
+                </div>`
+    })
+    Vue.component('a-c',{
+        // 添加该属性后容器不继承特性
+        inheritAttrs:false,
+        props:[''],
+        template:`<div>
+                    <h3>123</h3>
+                </div>`
+    })
+    // $attr
+    Vue.component('a-d',{
+        // 添加该属性后容器不继承特性
+        inheritAttrs:false,
+        props:['a','b','c'],
+        template:`<div>
+                    <p v-bind="$attrs" v-bind:a="a">
+                        123
+                        <span v-bind:b="b">span</span>    
+                        </p>
+                </div>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            type:"text",
+            attr1:1,
+            attr2:2,
+            attr3:3,
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

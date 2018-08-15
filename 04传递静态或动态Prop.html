@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>04传递静态或动态Prop.html</title>
+</head>
+
+<body>
+    <div id="a">
+        <h4>静态：</h4>
+        <a-b title="震惊！这个是写死的title属性"></a-b>
+        <h4>动态：</h4>
+        <a-b :title="title"></a-b>
+        <h4>动态，表达式</h4>
+        <a-b :title="title+'-后缀'"></a-b>
+
+        <h4>我们以往传递的都是些字符串，其实可以传递 任意 类型</h4>
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:['title'],
+        template:`<h2>{{title}}</h2>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            title:"我是标题"
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

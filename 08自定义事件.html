@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>1.事件名</h3>
+        <h4>和之前讲的组件名的规范不同，事件名怎么定义，就必须怎么用，
+            1).没有大小写自动转换；
+            2).kebab式不能用驼峰式代替
+        </h4>
+        <h3>事件名不会被用作一个 JavaScript 变量名或属性名，
+            v-on 事件监听器在 DOM 模板中会被自动转换为全小写 
+        </h3>
+        <h3>因此，自定义事件名建议使用kebab式，即 a-b 形式</h3>
+
+        <h3>2.自定义组件的 v-model</h3>
+        <h4>回忆 input输入框的父组件 上加v-model：</h4>
+        <a-b :value="msg" @input="msg = $event"></a-b>
+        <a-b v-model="msg"></a-b>
+        
+        <h4>以上是type=text的情况，
+            如果是type=radio或checkbox等，
+            value需要表示不同的目的，
+            此时，给组件选项加上 model 选项可以用来避免这样的冲突：
+        </h4>
+        <a-c v-model="a"></a-c>
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:['value'],
+        template:`<div>
+                    <input type="text" :value="value" @input="$emit('input',$event.target.value)" />
+                </div>`
+    })
+
+    // 加上 model 选项
+    Vue.component('a-c',{
+        model:{
+            prop:'checked',
+            event:'change'
+        },
+        props:{
+            // 仍然需要在组件的 props 选项里声明 checked 这个 prop
+            checked: Boolean
+        },
+        template:`<div>
+                <input type="radio" :checked="checked" @change="$emit('change',$event.target.checked)" />
+                </div>`
+    })
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            msg:"hello",
+            a:false
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

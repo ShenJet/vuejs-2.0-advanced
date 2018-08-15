@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>Prop的大小写 camelCase vs kebab</h3>
+        <a-b :blog-title="title"></a-b>
+
+        <h3>Prop类型</h3>
+        <h4>以往都是这样以字符串数组形式定义Props属性</h4>
+        <h4>其实还可以通过对象形式  定义每个数据的类型：</h4>
+        <a-c :blog-title="title" 
+        :date="date" 
+        :author="author" 
+        :zhiding="zhiding" 
+        :comments="comments" ></a-c>
+        <h4>如果数据类型不符合设定：</h4>
+        <h4>控制台报错：vue.dev.js:597 [Vue warn]: Invalid prop: xxxxx</h4>
+        <h4>这个功能相当于提供了数据的类型检查，非常有用。</h4>
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:['BlogTitle'],
+        template:`<h2>{{ BlogTitle }}</h2>`
+    })
+    Vue.component('a-c',{
+        // 以往都是这样以字符串数组形式
+        // props:['BlogTitle','date','author'],
+        // 可以定义类型：
+        props:{
+            BlogTitle:String,
+            date:Number,
+            author:String,
+            zhiding:Boolean,
+            comments:Array
+        },
+        // template:`<h2>{{ BlogTitle }}-{{ date }}-{{ author }}</h2>`
+        template:`<div><h2>{{ BlogTitle }}-{{ date }}-{{ author }}</h2>
+                <ol><li v-for='x in comments'>{{x}}</li></ol>
+                </div>`
+
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            title:'你好2019',
+            date:2019321,
+            // 试试date改成字符串形式：
+            // date:'2019321',
+            author:"shenjie",
+            zhiding:true,
+            comments:['兰州烧饼','楼主好人','写的不错']
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

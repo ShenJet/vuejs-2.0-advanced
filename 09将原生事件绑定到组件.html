@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>想要在一个组件的根元素上直接监听一个原生事件，
+            可以使用 v-on 的 .native 修饰符</h3>
+        
+        <a-b @focus.native='fn'></a-b>
+        <h4>有时候很管用，但是遇到input就有点特殊：
+            因为input外常常包裹着label：
+        </h4>
+        <a-c @focus.native="fn"></a-c>
+        <h4>此时，onFocus 处理函数不会如你预期地被调用</h4>
+        <h4>为解决该问题，Vue 提供了一个 $listeners 属性，它是一个对象，
+            里面包含了作用在这个组件上的所有监听器</h4>
+        
+        <!-- 可能是这样： -->
+        <!-- {
+            focus: function (event) { /* ... */ }
+            input: function (value) { /* ... */ },
+        } -->
+        <base-input :label="'请输入：'" v-model='msg'></base-input>
+        <h3>现在这个套着label的组件可以完全像一个普通的 <input> 元素一样使用了</h3>
+
+        <h3>.sync修饰符（v2.3.0+）</h3>
+        <h4>可能需要对一个 prop 进行“双向绑定”，即父组件通过prop传递给子组件数据，
+            子组件可以修改这个来源于父组件的数据。
+            但是，这种双向绑定会带来维护上的问题，
+            因为子组件可以修改父组件，且在父组件和子组件都没有明显的改动来源。
+        </h4>
+        <h4>因此，VUE 推荐以 update:my-prop-name 的模式触发事件取而代之：</h4>
+        <a-d :blogtitle="title" @update:blogtitle="title=$event"></a-d>
+        <h4>这样就不会有问题。</h4>
+
+        <h3>为方便起见，VUE为这种模式提供一个缩写，即 .sync 修饰符：</h3>
+        <a-d :blogtitle.sync="title" ></a-d>
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:{
+
+        },
+        template:`<div>
+                    <h2>dianwo</h2>
+                </div>`
+    })
+    // input-1
+    Vue.component('a-c',{
+        props:{
+            
+        },
+        template:`<label>
+                    <input type='text' >
+                </label>`
+    })
+    
+    //base-input
+    Vue.component('base-input',{
+        inheritAttrs: false,
+        props:{
+            value:null,
+            label:String
+        },
+        computed:{
+            // 定义了一个计算属性 inputListeners
+            inputListeners: function () {
+            // 定义一个变量vm存放当前组件
+            var vm = this
+            // `Object.assign` 将所有的对象合并为一个新对象
+            return Object.assign({},
+                // **我们从父级添加所有的监听器
+                this.$listeners,
+                // 然后我们添加自定义监听器，
+                // 或覆写一些监听器的行为
+                {
+                // 这里确保组件配合 `v-model` 的工作
+                input: function (event) {
+                    vm.$emit('input', event.target.value)
+                }
+                },{
+                    // 试试再加个mouseenter
+                    mouseenter:function(event){
+                        console.log('mouseenter');
+                    }   
+                }
+            )
+            }
+        },
+        template:`<label>{{label}}
+                    <input type='text'
+                    v-bind='$attrs'
+                    :value="value"
+                    v-on="inputListeners" >
+                </label>`
+    })
+
+    // update:my-prop-name
+    Vue.component('a-d',{
+        props:{
+            blogtitle: String
+        },
+        methods:{
+            changeTitle(){
+                console.log("点击h2");
+                
+                // 假如子组件直接更改父组件数据，则会被阻止：
+                // this.blogtitle += "#" ;
+                // 一定要主动向父组件传播一个事件：
+                this.$emit('update:blogtitle', "我是新标题");
+            }
+        },
+        template:`<div>
+                    <h2 @click="changeTitle">{{blogtitle}}</h2>
+                </div>`
+    })
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            data:123,
+            msg:"hello",
+            title:"我是标题"
+        },
+        methods: {
+           fn(){
+               console.log('native');
+           } 
+        }
+    })
+</script>
+
+</html>

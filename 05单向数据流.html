@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>prop使父子 prop 之间形成了一个单向下行绑定：
+            父级 prop 的更新会向下流动到子组件中，但是反过来则不行。
+            这样会防止从子组件意外改变父级组件的状态，
+            从而导致应用的数据流向难以理解。</h3>
+        <h3>下面这个写法是在子组件中去改变父组件中的数据： </h3>
+        <a-b :count="count"></a-b>
+        <h3>正确写法：若要修改可以组件自己维护一份(复制的)数据，
+        <a-c :init-count="count"></a-c>
+        <h3>以上是单向数据流的常见情况之一</h3>    
+
+        <h3>情况之二：</h3>    
+        <h4>这个 prop 以一种原始的值传入且需要进行转换。
+            在这种情况下，最好使用这个 prop 的值来定义一个 计算属性：
+        </h4>
+        <a-d :name='name'></a-d>
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    // 下面这个写法是在组组件中去改变父组件中的数据：
+    Vue.component('a-b',{
+        props:['count'],
+        template:`<div>
+                    <button @click="count++">{{count}}</button>
+                </div>`
+    })
+    // 应该组件自己维护一份数据，可改写为：
+    Vue.component('a-c',{
+        props:['initCount'],
+        data:function(){
+            return { count:this.initCount }
+        },
+        template:`<div>
+                    <button @click="count++">{{count}}</button>
+                </div>`
+    })
+
+    // 情况之二：
+    Vue.component('a-d',{
+        props:['name'],
+        // data:function(){
+        //     return { count:this.initCount }
+        // },
+        computed:{
+            initName(){
+                return this.name.toLowerCase()
+            }
+        },
+        template:`<div>
+                    小写的名字：{{initName}}
+                </div>`
+    })
+
+
+
+
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            count:0,
+            name:"Steve Jobs"
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

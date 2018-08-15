@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>1.插槽：将 slot 元素作为承载分发内容的出口。</h3>
+        <a-b>
+            <article><h3>我是标题</h3><p>我是正文。</p></article>
+        </a-b>
+        <a-c url="//baidu.com"><h3>百度一下</h3></a-c>
+
+        <h3>2.具名插槽</h3>
+        <h4>有些时候我们需要多个插槽</h4>
+        <my-blog>
+            <template slot='header'>
+                <h2>我是标题</h2>
+            </template>
+            <!-- 其他东西会被不具名的slot收纳 -->
+            <p>其他东西1</p>
+            <template slot='content'>
+                <p>我是正文我是正文我是正文我是正文我是正文我是正文</p>
+            </template>
+            <template slot='footer'>
+                <b>我是结尾</b>
+            </template>
+            <!-- 其他东西会被不具名的slot收纳 -->
+            其他东西2
+        </my-blog>
+        <!-- 可以把slot属性直接写在标签上： -->
+        <my-blog>
+            <h2 slot='header'>我是标题</h2>
+            <!-- 其他东西会被不具名的slot收纳 -->
+            <p>其他东西1</p>
+            <p slot='content'>我是正文我是正文我是正文我是正文我是正文我是正文</p>
+            <b slot='footer'>我是结尾</b>
+            <!-- 其他东西会被不具名的slot收纳 -->
+            其他东西2
+        </my-blog>
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:{
+            
+        },
+        template:`<div>
+                    <slot></slot>    
+                </div>`
+    })
+    Vue.component('a-c',{
+        props:{
+            url:null 
+        },
+        template:`<a :href='url'>
+                    <slot></slot>    
+                </a>`
+    })
+    Vue.component('my-blog',{
+        props:{
+            url:null 
+        },
+        template:`<div style="border:1px solid #ccc;">
+                <header>
+                    <slot name='header'></slot>
+                </header>
+                <main>
+                    <slot name='content'></slot>
+                </main>
+                <slot></slot>    
+                <footer>
+                    <slot name='footer'></slot>
+                </footer>
+            </div>`
+    })
+
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

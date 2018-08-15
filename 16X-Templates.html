@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <a-b :content="content"></a-b>
+        <h3>可以用于模板特别大的 demo 或极小型的应用，
+            但是其它情况下请避免使用，
+            因为这会将模板和该组件的其它定义分离开。</h3>
+    </div>
+<script type="text/x-template" id="template1">
+    
+    <div style="border:1px solid #ccc">
+        <h2>我是标题</h2>
+        <p>{{content}}</p>
+    </div>
+</script>
+</body>
+<script src="vue.dev.js"></script>
+
+<script>
+    Vue.component('a-b',{
+        props:{
+            content:null
+        },
+        template:"#template1"
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            content:"我是正文我是正文我是正文我是正文我是正文"
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

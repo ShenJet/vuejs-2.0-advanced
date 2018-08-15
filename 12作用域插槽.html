@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>1.作用域插槽</h3>
+        <h4>有的时候你希望提供的组件带有一个可从子组件获取数据的可复用的插槽。 例如一个简单的 todo-list 组件的模板：</h4>
+        <todo-list :todos="todos"></todo-list>
+
+        <h4>希望每个独立的待办项渲染出和 todo.text 不太一样的东西，可以配合slot</h4>
+        <todo-list :todos="todos">
+            <!-- 将slot的作用域命名为 slotProps -->
+                <template slot-scope="slotProps">
+                    <!-- 为待办项自定义一个模板，-->
+                    <!-- 通过 `slotProps` 定制每个待办项。-->
+                    <span v-if="slotProps.todo.isComplete">✓</span>
+                    <span v-else>x</span>
+                    {{ slotProps.todo.text }}
+                </template>
+        </todo-list>
+        <h4>在 2.5.0+，slot-scope 不再限制在 template 元素上使用，而可以用在插槽内的任何元素或组件上。</h4>
+
+        <h3>2.解构 slot-scope</h3>
+        <h4>如果一个 JavaScript 表达式在一个函数定义的参数位置有效，
+            那么这个表达式实际上就可以被 slot-scope 接受。
+            也就是说你可以在支持的环境下 (单文件组件或现代浏览器)，
+            在这些表达式中使用 ES2015 解构语法。例如：</h4>
+        <todo-list v-bind:todos="todos">
+            <template slot-scope="{ todo }">
+                <span v-if="todo.isComplete">✓</span>
+                <span v-else>x</span>
+                {{ todo.text }}
+            </template>
+        </todo-list>
+
+    </div>
+
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('todo-list', {
+        props: {
+            todos:Array
+        },
+        // template: `<ul>
+        //             <li v-for="todo in todos"
+        //                 v-bind:key="todo.id">
+                        // {{todo.text}}
+        //             </li>
+        //             </ul>`
+        template: `<ul>
+                    <li v-for="todo in todos"
+                        v-bind:key="todo.id">
+                        <slot v-bind:todo="todo">
+                        {{ todo.text }}
+                        </slot>
+                    </li>
+                    </ul>`
+    })
+
+    
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            todos:[
+                {id:0,text:"吃饭",isComplete:false},
+                {id:2,text:"睡觉",isComplete:true},
+                {id:1,text:"洗澡",isComplete:true},
+            ]
+        },
+        methods: {
+
+        }
+    })
+</script>
+
+</html>

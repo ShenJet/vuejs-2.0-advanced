@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>1.插槽默认值</h3>
+        <h4>有的时候为插槽提供默认的内容是很有用的。
+        例如，一个 submit-button 组件可能希望这个按钮的默认内容是“Submit”，
+        但是同时允许用户覆写为“Save”、“Upload”或别的内容。</h4>
+        <submit-button></submit-button>
+        <submit-button>Save</submit-button>
+        <submit-button>upload</submit-button>
+
+        <h3>2.编译作用域</h3>
+        <h4>实例的属性和组件的prop都可访问到。唯独不能访问组件a-b的属性</h4>
+        <a-b url="//baidu.com" :x="msg">
+            点击前往{{urlname}}，地址是：{{url}},{{msg}},
+        </a-b>
+        <h3>编译准则：父组件模板的所有东西都会在父级作用域内编译；
+            子组件模板的所有东西都会在子级作用域内编译</h3>
+
+
+
+
+
+
+    </div>
+    
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('submit-button',{
+        props:{
+            
+        },
+        template:`<div>
+                    <button type="submit">
+                        <slot>Submit</slot>
+                    </button>
+                </div>`
+    })
+
+    Vue.component('a-b',{
+        props:{
+            x:null
+        },
+        template:`<div>
+                    <slot></slot>
+                </div>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            urlname:"百度首页",
+            msg:'hello'
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

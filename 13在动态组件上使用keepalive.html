@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .tab{
+            width: 600px;
+            height: 150px;
+            border: 1px solid #ccc;
+        }
+        .left{
+            float: left;
+            border-right: 2px solid blue;
+            height: 100%;
+        }
+        .left button{
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="a">
+        <div><button @click='which="tab1"'>tab1</button>
+            <button @click='which="tab2"'>tab2</button></div>
+        <!-- <component 
+            :is="which" 
+            :which-second="WhichSecond" 
+            :second-btns="SecondBtns" 
+            :second-pages="SecondPages"></component> -->
+        <keep-alive>
+            <component 
+            :is="which" 
+            :which-second="WhichSecond" 
+            :second-btns="SecondBtns" 
+            :second-pages="SecondPages"></component>
+        </keep-alive>
+
+
+    </div>
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('tab1',{
+        props:{
+            WhichSecond:String,
+            SecondBtns:Array,
+            SecondPages:Array
+        },
+        data:function(){
+            return {current:this.WhichSecond}
+        },
+        template:`<div class="tab">
+                    <div class='left'> 
+                        <div v-for='(x,i) in SecondBtns' @click="current=SecondPages[i]"><button>{{x}}</button></div> 
+                    </div> 
+                    <component :is='current'></component>  
+                </div>`
+    })
+    // tab1的3个子组件：
+    Vue.component('tab11',{
+        props:{
+            
+        },
+        template:`<div class="right">
+                    <h3>我是tab11</h3>
+                </div>`
+    })
+    Vue.component('tab12',{
+        props:{
+            
+        },
+        template:`<div class="right">
+                    <h3>我是tab12</h3>
+                </div>`
+    })
+    Vue.component('tab13',{
+        props:{
+            
+        },
+        template:`<div class="right">
+                    <h3>我是tab13</h3>
+                </div>`
+    })
+
+
+    Vue.component('tab2',{
+        props:{
+            
+        },
+        template:`<div class="tab">
+                    <h3>我是tab2</h3>
+                    <input type='text' />
+                </div>`
+    })
+
+
+
+
+
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            which:"tab1",
+            WhichSecond:"tab11",
+            SecondBtns:['二级按钮1','二级按钮2','二级按钮3'],
+            SecondPages:['tab11','tab12','tab13']
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>
