@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./animate.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>1.可通过以下特性来自定义类名</h3>
+        <ol>
+            <li>enter-class</li>
+            <li>enter-active-class</li>
+            <li>enter-to-class (2.1.8+)</li>
+            <li>leave-class</li>
+            <li>leave-active-class</li>
+            <li>leave-to-class (2.1.8+)</li>
+        </ol>
+        <h3>2.优先级高于普通的类名，这对于 Vue 的过渡系统和其他第三方 CSS 动画库，
+            如 Animate.css 结合使用十分有用:</h3>
+            <div>
+                <button @click="show = !show">变</button>
+                <!-- 不该写animate提供的效果的话，name可以不加。 -->
+                <transition  name="custom-classes-transition" 
+                enter-active-class="animated fadeInDown"
+                leave-active-class="animated fadeOutUp">
+                    <p v-if="show">hello hello hello hello </p>
+                </transition>
+            </div>
+
+        <h3>3.同时使用过渡和动画</h3>    
+        <h4>Vue 为了知道过渡的完成，必须设置相应的事件监听器。
+            它可以是 transitionend 或 animationend ，这取决于给元素应用的 CSS 规则。
+            如果你使用其中任何一种，Vue 能自动识别类型并设置监听。
+            在一些场景中，你需要给同一个元素同时设置两种过渡动效，比如 animation 很快的被触发并完成了，
+            而 transition 效果还没结束。
+            在这种情况中，你就需要使用 type 特性并设置 animation 
+            或 transition 来明确声明你需要 Vue 监听的类型。</h4>
+        
+        <h4>4.显性的设置过渡持续时间（2.2.0+）</h4>
+        <h4>有一个精心编排的一系列过渡效果，
+            一些嵌套的内部元素相比于过渡效果的根元素有延迟的或更长的过渡效果，
+            可以用 transition 组件上的 duration 属性定制一个显性的过渡持续时间 (以毫秒计)：</h4>
+        <div>
+            <button @click="show1 = !show1">变</button>
+            <!-- 不该写animate提供的效果的话，name可以不加。 -->
+            <transition  name="custom-classes-transition" 
+            enter-active-class="animated fadeInDown"
+            leave-active-class="animated fadeOutUp"
+            :duration="3000">
+                <p v-if="show1">hello hello hello hello </p>
+            </transition>
+        </div>   
+        <div>
+            <button @click="show2 = !show2">变</button>
+            <!-- 不改写animate提供的效果的话，name可以不加。 -->
+            <transition  name="custom-classes-transition" 
+            enter-active-class="animated fadeInDown"
+            leave-active-class="animated fadeOutUp"
+            :duration="{ enter: 500, leave: 800 }">
+                <p v-if="show2">hello hello hello hello </p>
+            </transition>
+        </div>
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:{
+            
+        },
+        template:`<div>
+                    
+                </div>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            show:true,
+            show1:true,
+            show2:true
+
+
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>

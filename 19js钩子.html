@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./animate.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="a">
+        <h3>1.可通过以下特性来自定义类名</h3>
+        <button @click="show=!show">变</button>
+        <transition
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @after-enter="afterEnter"
+            @enter-cancelled="enterCancelled"
+
+            @before-leave="beforeLeave"
+            @leave="leave"
+            @after-leave="afterLeave"
+            @leave-cancelled="leaveCancelled"
+            >
+        <p v-if="show">埃里克的比利时的福克斯抱佛脚</p>
+        </transition>
+        
+    </div>
+
+</body>
+
+<script src="vue.dev.js"></script>
+<!-- velocity js动画库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+
+<script>
+    Vue.component('a-b',{
+        props:{
+            
+        },
+        template:`<div>
+                    
+                </div>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            show:true,
+            show1:true,
+            show2:true
+
+
+        },
+        methods: {
+            beforeEnter:function(el){
+                console.log(1);
+                el.style.opacity = 0
+                el.style.transformOrigin = 'left'
+            },
+            // 当只用 JavaScript 过渡的时候，
+            // 在 enter 和 leave 中必须使用 done 进行回调。
+            // 否则，它们将被同步调用，过渡会立即完成。
+
+            // 推荐对于仅使用 JavaScript 过渡的元素添加 v-bind:css="false"，
+            // Vue 会跳过 CSS 的检测。
+            // 这也可以避免过渡过程中 CSS 的影响。
+            enter:function(el,done){
+                console.log(2);
+                Velocity(el, { opacity: 1, fontSize: '1.4em' }, { duration: 300 })
+                Velocity(el, { fontSize: '1em' }, { complete: done })
+
+            },
+            afterEnter:function(el){
+                console.log(3);
+            },
+            enterCancelled:function(el){
+                console.log(4);
+            },
+            beforeLeave:function(el){
+                console.log(5);
+            },
+            leave:function(el,done){
+                console.log(6);
+                Velocity(el, { translateX: '15px', rotateZ: '50deg' }, { duration: 600 })
+                Velocity(el, { rotateZ: '100deg' }, { loop: 2 })
+                Velocity(el, {
+                    rotateZ: '45deg',
+                    translateY: '30px',
+                    translateX: '30px',
+                    opacity: 0
+                }, { complete: done })
+            },
+            afterLeave:function(el){
+                console.log(7);
+            },
+            leaveCancelled:function(el){
+                console.log(8);
+            },          
+
+        }
+    })
+</script>
+
+</html>

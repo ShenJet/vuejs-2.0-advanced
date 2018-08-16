@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./animate.css">
+</head>
+
+<body>
+    <div id="a">
+        <h4>1.最常见的多标签过渡是一个列表和描述这个列表为空消息的元素：</h4>
+        <button @click="change">变化</button>
+        <transition 
+        enter-active-class="animated fadeInDown"
+        leave-active-class="animated fadeOutUp">
+            <table v-if="items.length > 0">
+                <tr v-for="x in items">
+                    <td>1</td>
+                    <td>2</td>
+                </tr>
+            </table>
+            <p v-else>Sorry, no items found.</p>
+        </transition>
+
+        <h3>如果互相切换的元素名相同，记得最好给它们一个独立的key</h3>
+
+        <h4>2.遇到多个v-if的情况：</h4>
+        <button @click="changeState">docState:{{docState}}</button>
+        <transition>
+            <button v-if="docState === 'saved'" key="saved">
+                编辑
+            </button>
+            <button v-if="docState === 'edited'" key="edited">
+                保存
+            </button>
+            <button v-if="docState === 'editing'" key="editing">
+                取消
+            </button>
+        </transition>
+
+        <h4>以上可以写成：</h4>
+        <button @click="changeState">docState:{{docState}}</button>
+        <transition>
+            <button :key="docState">
+                {{docState}}
+            </button>
+        </transition>
+
+        <h4>3.过渡模式</h4>
+        <h4>在 “on” 按钮和 “off” 按钮的过渡中，两个按钮都被重绘了，
+            一个离开过渡的时候另一个开始进入过渡。
+            这是 transition 的默认行为 - 进入和离开同时发生。</h4>
+        <button @click="changeBtn">切换开关</button>
+        <transition 
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut">
+            <button :key="kaiguan">
+                {{kaiguan}}
+            </button>
+        </transition>
+        <h4>此时会发现按钮显示隐藏会有一种顿挫和突兀</h4>
+        <h4>给里面的button加个绝对定位，是他们俩位置重叠</h4>
+        <button @click="changeBtn1">切换开关</button>
+        <transition 
+        enter-active-class="animated fadeInRight"
+        leave-active-class="animated fadeOutLeft">
+            <button :key="kaiguan1" style="position: absolute">
+                {{kaiguan1}}
+            </button>
+        </transition>
+
+        <h3>同时生效的进入和离开的过渡不能满足所有要求，所以 Vue 提供了 过渡模式</h3>
+        <ol>
+            <li>in-out:新元素先进行过渡，完成之后当前元素过渡离开。</li>
+            <li>out-in:当前元素先进行过渡，完成之后新元素过渡进入。</li>
+        </ol>
+        <h4>用out-in重新写以上组件</h4>
+        <button @click="changeBtn2">切换开关</button>
+        <transition 
+        mode="out-in"
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut">
+            <button :key="kaiguan2" >
+                {{kaiguan2}}
+            </button>
+        </transition>
+        <h4>只用添加一个简单的特性，就解决了之前的过渡问题而无需任何额外的代码</h4>
+        <h4>in-out用到的比较少  因为有点怪异</h4>
+
+
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:{
+            
+        },
+        template:`<div>
+                    
+                </div>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        data: {
+            items:[],
+            docState:'edited',
+            kaiguan:"on",
+            kaiguan1:"on",
+            kaiguan2:"on"
+
+
+        },
+        methods: {
+            change(){
+                if(this.items.length>0){
+                    this.items = []
+                }else{
+                    this.items = [1,2,3]
+                }
+            },
+            changeState(){
+                this.docState = ['saved','edited','editing'][Math.round(Math.random()*2)]
+            },
+            changeBtn(){
+                if(this.kaiguan=='off'){
+                    this.kaiguan='on'
+                }else{
+                    this.kaiguan='off'
+                }
+            },
+            changeBtn1(){
+                if(this.kaiguan1=='off'){
+                    this.kaiguan1='on'
+                }else{
+                    this.kaiguan1='off'
+                }
+            },
+            changeBtn2(){
+                if(this.kaiguan2=='off'){
+                    this.kaiguan2='on'
+                }else{
+                    this.kaiguan2='off'
+                }
+            },
+        }
+    })
+</script>
+
+</html>

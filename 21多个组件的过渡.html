@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./animate.css">
+    <style lang="css">
+        .tab{
+            width: 600px;
+            height: 150px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="a">
+        <h4>多个组件的过渡简单很多 - 我们不需要使用 key 特性。
+            相反，我们只需要使用动态组件：</h4>
+        <button v-for="x in btns" @click="which=x">{{x}}</button>
+        <transition 
+        mode="out-in"
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut">
+            <component  :is="which"></component>
+        </transition>
+        
+    </div>
+
+</body>
+<script src="vue.dev.js"></script>
+<script>
+    Vue.component('a-b',{
+        props:{
+            
+        },
+        template:`<div>
+                    
+                </div>`
+    })
+    var vm = new Vue({
+        el: '#a',
+        components:{
+            'tab1':{
+                template:"<div class='tab'>Component A</div>"
+            },
+            'tab2':{
+                template:"<div class='tab'>Component B</div>"
+            },
+            'tab3':{
+                template:"<div class='tab'>Component C</div>"
+            },
+        },
+        data: {
+            btns:['tab1','tab2','tab3'],
+            which:"tab1"
+        },
+        methods: {
+            
+        }
+    })
+</script>
+
+</html>
